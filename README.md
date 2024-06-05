@@ -22,3 +22,7 @@ Retrieves the signatures for all binaries on the client system
 ## Other
 
 We have to keep in mind that different OSs/Architectures and different versions of the binary generate different hashes. Also, the DNF package manager doesn't keep old versions of packages. This means that we have to create images for every kind of operating system and architecture we want. Also, we'll have to keep a record of old versions of packages, when a new version of the package is released it has to create a new entry for the new version (if you use dnf, you can specify relsease-version=29 to get old versions of packages). Since these hashes will be used in the future, they should probably be signed with a system pgp key. 
+
+## TODO
+
+    - Alpine doesn't include bash by default, entrypoint won't work

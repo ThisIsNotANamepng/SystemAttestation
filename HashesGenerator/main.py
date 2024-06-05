@@ -1,10 +1,8 @@
 import subprocess
 
-system="ubuntu"
+systems = ["alpine", "amazon", "arch", "debian", "fedora", "oracle", "rocky", "ubuntu"]
 package="grep"
 
-command = "podman run attestation_"+system+":latest signature "+package
-
-print((command).split())
-
-subprocess.run((command).split()) 
+for system in systems:
+    command = "podman run attestation_"+system+":latest signature "+package
+    subprocess.run((command).split()) 

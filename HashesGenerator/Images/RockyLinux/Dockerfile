@@ -1,7 +1,6 @@
-FROM fedora:latest
+FROM rockylinux:9
 
 # Copy the bash script into the container
-#COPY /home/jack/code/SystemAttestation/HashesGenerator/entrypoint.sh /entrypoint.sh
 COPY entrypoint.sh /entrypoint.sh
 
 # Make the script executable
