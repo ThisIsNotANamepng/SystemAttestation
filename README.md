@@ -1,5 +1,7 @@
 # System Attestation 
 
+__This project is nowhere near finished, it is not production ready, check back later__
+
 This tool is created to check the integrity of system files on Linux systems. It works by getting the sha256 hash of an installed binary on a fresh, safe podman container, and then serving the verified hash of the built binary to the client, which compares it to the hash of installed binary on the client system. It consists of three components. 
 
 ### Hashes Generator
