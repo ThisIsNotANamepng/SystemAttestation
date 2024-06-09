@@ -28,3 +28,4 @@ We have to keep in mind that different OSs/Architectures and different versions 
 ## TODO
 
     - Alpine doesn't include bash by default, entrypoint won't work
+    - I also want a dashboard for seeing where the package versions for the fleet of images are at, and to manage how the server is doing, the amount of packages upgraded recently, etc.

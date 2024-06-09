@@ -2,10 +2,8 @@
 
 : '
 Takes three commands. 
-    - install - install the specified package
     - signature - gets the sha256 signature for the specified package. Different distros keep them in different spots, so the script will have to change depending 
-    - upgrade - upgrade the specified package
-    - version
+    - version - returns the installed version of the package
 
 '
 
@@ -18,21 +16,17 @@ if [ "$#" -gt 0 ]; then
 fi
 
 
-if [ "$1" == "install" ]; then
-    install_command="$2"
-    #echo "Install command: $install_command"
-    action="install"
-    # Add code to execute for 'install' command
-elif [ "$1" == "upgrade" ]; then
-    upgrade_option="$2"
-    #echo "Upgrade option: $upgrade_option"
-    action="upgrade"
-    # Add code to execute for 'upgrade' command
-elif [ "$1" == "signature" ]; then
+if [ "$1" == "signature" ]; then
     package="$2"
     #echo "Package: $package"
-    action="retrieve"
+    action="signature"
     # Add code to execute for 'signature' command
+elif [ "$1" == "version" ]; then
+    package="$2"
+    #echo "Package: $package"
+    action="version"
+    # Add code to execute for 'signature' command
+
 else
     echo "Unknown command: $1"
     exit 1
@@ -95,10 +89,14 @@ fi
 if [ "$distro" == "Alpine" ]; then
     # Fedora specific logic
 
-    if [ "$action" == "retrieve" ]; then
+    if [ "$action" == "signature" ]; then
 
         output=$(sha256sum /bin/${package})
         echo $output
+
+    elif [ "$action" == "version" ]; then
+
+        echo "Gets the version"
 
     fi
 
@@ -106,10 +104,14 @@ elif [ "$distro" == "Amazon" ]; then
     # Ubuntu specific logic
     #echo "Performing Ubuntu specific tasks..."
 
-    if [ "$action" == "retrieve" ]; then
+    if [ "$action" == "signature" ]; then
 
         output=$(sha256sum /bin/${package})
         echo $output
+
+    elif [ "$action" == "version" ]; then
+
+        dnf list installed "$package" | awk 'NR==2 {print $2}'
 
     fi
 
@@ -117,10 +119,14 @@ elif [ "$distro" == "Arch" ]; then
     # Ubuntu specific logic
     #echo "Performing Ubuntu specific tasks..."
 
-    if [ "$action" == "retrieve" ]; then
+    if [ "$action" == "signature" ]; then
 
         output=$(sha256sum /bin/${package})
         echo $output
+
+    elif [ "$action" == "version" ]; then
+
+        pacman -Qi "$package" | awk '/^Version/ {print $3}'
 
     fi
 
@@ -128,54 +134,66 @@ elif [ "$distro" == "Debian" ]; then
     # Ubuntu specific logic
     #echo "Performing Ubuntu specific tasks..."
 
-    if [ "$action" == "retrieve" ]; then
+    if [ "$action" == "signature" ]; then
 
         output=$(sha256sum /bin/${package})
         echo $output
+
+    elif [ "$action" == "version" ]; then
+
+        apt show "$package" | grep -i '^Version:' | awk '{print $2}'
 
     fi
 
 elif [ "$distro" == "Fedora" ]; then
-    # Ubuntu specific logic
-    #echo "Performing Ubuntu specific tasks..."
 
-    if [ "$action" == "retrieve" ]; then
+    if [ "$action" == "signature" ]; then
 
         output=$(sha256sum /bin/${package})
         echo $output
+
+    elif [ "$action" == "version" ]; then
+
+        dnf list installed "$package" | awk 'NR==2 {print $2}'
 
     fi
 
 elif [ "$distro" == "Oracle" ]; then
-    # Ubuntu specific logic
-    #echo "Performing Ubuntu specific tasks..."
 
-    if [ "$action" == "retrieve" ]; then
+    if [ "$action" == "signature" ]; then
 
         output=$(sha256sum /bin/${package})
         echo $output
+
+    elif [ "$action" == "version" ]; then
+
+        yum list installed "$package" | awk 'NR==3 {print $2}'
 
     fi
 
 elif [ "$distro" == "Rocky" ]; then
-    # Ubuntu specific logic
-    #echo "Performing Ubuntu specific tasks..."
 
-    if [ "$action" == "retrieve" ]; then
+    if [ "$action" == "signature" ]; then
 
         output=$(sha256sum /bin/${package})
         echo $output
+
+    elif [ "$action" == "version" ]; then
+
+        dnf list installed "$package" | awk 'NR==2 {print $2}'
 
     fi
 
 elif [ "$distro" == "Ubuntu" ]; then
-    # Ubuntu specific logic
-    #echo "Performing Ubuntu specific tasks..."
 
-    if [ "$action" == "retrieve" ]; then
+    if [ "$action" == "signature" ]; then
 
         output=$(sha256sum /bin/${package})
         echo $output
+
+    elif [ "$action" == "version" ]; then
+
+        apt show "$package" | grep -i '^Version:' | awk '{print $2}'
 
     fi
 
