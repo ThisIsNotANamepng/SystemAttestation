@@ -2,6 +2,8 @@
 
 __This project is nowhere near finished, it is not production ready, check back later__
 
+This is a research project which aims to showcase a supply chain security technique. It's targetted for Linux machines, from HPC supercomputers to embedded devices.
+
 This tool is created to check the integrity of system files on Linux systems. It works by getting the sha256 hash of an installed binary on a fresh, safe podman container, and then serving the verified hash of the built binary to the client, which compares it to the hash of installed binary on the client system. It consists of three components. 
 
 ### Hashes Generator
@@ -18,14 +20,13 @@ Determining the newest version of the package is the server's responsibility
 
 ### Client
 
-Retrieves the signatures for all binaries on the client system
-
+Retrieves the signatures for the binaries on a client system and compares them to the ones on the server
 
 ## Other
 
-We have to keep in mind that different OSs/Architectures and different versions of the binary generate different hashes. Also, the DNF package manager doesn't keep old versions of packages. This means that we have to create images for every kind of operating system and architecture we want. Also, we'll have to keep a record of old versions of packages, when a new version of the package is released it has to create a new entry for the new version (if you use dnf, you can specify relsease-version=29 to get old versions of packages). Since these hashes will be used in the future, they should probably be signed with a system pgp key. 
+We have to keep in mind that different OSs/Architectures and different versions of the binary generate different hashes. Also, the DNF package manager doesn't keep old versions of packages. This means that we have to create images for every kind of operating system and architecture we want. Also, we'll have to keep a record of old versions of packages, when a new version of the package is released it has to create a new entry for the new version (if you use dnf, you can specify release-version=29 to get old versions of packages). Since these hashes will be used in the future, they should probably be signed with a system pgp key. 
 
 ## TODO
-
     - Alpine doesn't include bash by default, entrypoint won't work
     - I also want a dashboard for seeing where the package versions for the fleet of images are at, and to manage how the server is doing, the amount of packages upgraded recently, etc.
+    - Add a cron job for the images to upgrade packages every 15 minutes or something

@@ -9,7 +9,7 @@ for system in systems:
     subprocess.run((command).split()) 
 
 
-I'm going to deprecate the install function because I don't think allowing users to arbritrarily install a package, even from the repo is a good idea. There will be a form or something to request new packages
+I'm going to deprecate the install function because I don't think allowing users to arbitrarily install a package, even from the repo is a good idea. There will be a form or something to request new packages
 
 def install(package, system):
     command = "podman run attestation_"+system+":latest install "+package
@@ -17,7 +17,7 @@ def install(package, system):
     print("Result from bash script:", result.stdout)    
 
     
-I'm going to deprecate the uphrade function in favor of a cron job or something which upgrades the whole system every 15 minutes or something. Few users would be more up to date than that.
+I'm going to deprecate the upgrade function in favor of a cron job or something which upgrades the whole system every 15 minutes or something. Few users would be more up to date than that.
 
 def upgrade(package, system):
     command = "podman run attestation_"+system+":latest upgrade "+package

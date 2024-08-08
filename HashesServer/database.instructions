@@ -1,0 +1,10 @@
+
+CREATE TABLE hashes (
+    system TEXT NOT NULL,
+    package TEXT NOT NULL,
+    version TEXT NOT NULL,
+    hash TEXT NOT NULL
+);
+
+CREATE TABLE hashes (system TEXT NOT NULL, package TEXT NOT NULL, version TEXT NOT NULL, hash TEXT NOT NULL);
+
