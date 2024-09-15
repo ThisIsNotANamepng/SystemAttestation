@@ -40,5 +40,5 @@ def version(package, system):
 systems = ["amazon", "arch", "debian", "fedora", "oracle", "rocky", "ubuntu"]
 package="grep"
 
-for system in systems:
-    print(system, ":", signature("grep", system), version("grep", system))
+#for system in systems:
+#    print(system, ":", signature("grep", system), version("grep", system))
