@@ -1,22 +1,24 @@
 from flask import Flask, request, jsonify
 import sqlite3
-import signature_getter
+import generator 
 
 def get_signature_database(system, package, version):
 
-    conn = sqlite3.connect('database.db')
+    conn = sqlite3.connect('../database.db')
     cursor = conn.cursor()
-    print("SELECT * FROM hashes WHERE system = '"+system+"' AND package = '"+package+"' AND version = '"+version+"';")
-    cursor.execute("SELECT * FROM hashes WHERE system = '"+system+"' AND package = '"+package+"' AND version = '"+version+"';")
+    print("SELECT * FROM "+system+" WHERE package = '"+package+"' AND version = '"+version+"';")
+    cursor.execute("SELECT * FROM "+system+" WHERE package = '"+package+"' AND version = '"+version+"';")
     data = cursor.fetchall()
     conn.close()
+
+    print(data)
 
     if data:
         return data[0]
     else:
         return "none"
 
-def exists(system, package, version):
+def check_if_package_in_database(system, package, version):
     # This is the def the page calls, it uses get_signature
     hash = get_signature_database(system, package, version)
 
@@ -25,11 +27,6 @@ def exists(system, package, version):
         # if not we return no package found
         # if yes we put the package in the database and return it
         a=1
-
-def get_signature_image(system, package):
-    # This gets the signature from the image fleet, used if the signature isn't in the database
-    return signature_getter.signature(package, system)
-
 
 app = Flask(__name__)
 
@@ -44,14 +41,26 @@ def route_signature():
         print(package, version, system)
         return "Missing package or version"
     
-    signature = get_signature_database(package, version, system)
+    signature = get_signature_database(system, package, version)
 
     if signature == "none":
         # The signature isn't in the database, need to get it from the image fleet
-        signature = get_signature_image(system, package)
+
+        if generator.package_safety(system, package):
+            generator.new_package(system, package)
+        else:
+            return "Invalid package"
+        
+        signature = get_signature_database(system, package, version)
 
     print(signature)
-    return signature
+    return signature[2]
+
+@app.route('/batch', methods=['GET'])
+def batch():
+    # Takes a number of packages in one dump
+    print()
+
 
 @app.route('/exists', methods=['GET'])
 def route_exists():
@@ -68,7 +77,7 @@ def route_exists():
     except:
         return 'Failed'
     
-    hash = get_signature(system, package, version)
+    hash = get_signature_database(system, package, version)
 
     if not hash:
         return 'Does not exist'

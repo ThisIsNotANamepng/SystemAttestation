@@ -198,4 +198,3 @@ elif [ "$distro" == "Ubuntu" ]; then
     fi
 
 fi
-
